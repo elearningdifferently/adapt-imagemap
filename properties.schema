@@ -15,7 +15,7 @@
     "ariaPopupLabel": {
       "type": "string",
       "required": true,
-      "default": "Hotgraphic popup",
+      "default": "Image Map popup",
       "inputType": "Text",
       "validators": [],
       "translatable": true
@@ -40,16 +40,16 @@
     },
     "_graphic": {
       "type": "object",
-      "required": false,
-      "title": "Main hotgraphic",
+      "required": true,
+      "title": "Main Image Map",
       "properties": {
         "src": {
           "type": "string",
-          "required": false,
+          "required": true,
           "default": "",
           "inputType": "Asset:image",
-          "validators": [],
-          "help": "This is the image that appears behind the pins"
+          "validators": ["required"],
+          "help": "This is the image that appears in the background"
         },
         "alt": {
           "type": "string",
@@ -68,26 +68,26 @@
           "validators": [],
           "help": "Text to be displayed as an attribution",
           "translatable": true
+        },
+        "width": {
+          "type": "number",
+          "required": true,
+          "default": "0",
+          "inputType": "Number",
+            "validators": ["required", "number"],
+          "help": "Width in pixels",
+          "translatable": true
+        },
+        "height": {
+          "type": "number",
+          "required": true,
+          "default": "0",
+          "inputType": "Number",
+            "validators": ["required", "number"],
+          "help": "Height in pixels",
+          "translatable": true
         }
       }
-    },
-    "mobileBody": {
-      "type": "string",
-      "required": false,
-      "default": "",
-      "inputType": "TextArea",
-      "validators": [],
-      "help": "This body text is displayed on mobile devices when this component turns into a Narrative",
-      "translatable": true
-    },
-    "mobileInstruction": {
-      "type": "string",
-      "required": false,
-      "default": "",
-      "inputType": "TextArea",
-      "validators": [],
-      "help": "This instruction text is displayed on mobile devices when this component turns into a Narrative",
-      "translatable": true
     },
     "_hidePagination": {
       "type": "boolean",
@@ -107,19 +107,10 @@
       "validators": [],
       "help": "If enabled, the items in the open popup will be allowed to cycle through continiously"
     },
-    "_useGraphicsAsPins": {
-      "type": "boolean",
-      "required": true,
-      "default": false,
-      "title": "Use graphics as pins",
-      "inputType": "Checkbox",
-      "validators": [],
-      "help": "If enabled, the main graphic will be hidden and pins will be displayed as images which can be positioned using classes"
-    },
     "_items": {
       "type": "array",
       "required": true,
-      "title": "Hot Graphic Pins",
+      "title": "Image Map Coordinates",
       "items": {
         "type": "object",
         "required": true,
@@ -142,18 +133,9 @@
             "help": "Body text displayed in the popup",
             "translatable": true
           },
-          "strapline": {
-            "type": "string",
-            "required": true,
-            "default": "",
-            "inputType": "Text",
-            "validators": ["required"],
-            "help": "Strapline displayed on mobile version",
-            "translatable": true
-          },
           "_graphic": {
             "type": "object",
-            "required": true,
+            "required": false,
             "title": "Item Graphic",
             "properties": {
               "src": {
@@ -161,7 +143,7 @@
                 "required": true,
                 "default": "",
                 "inputType": "Asset:image",
-                "validators": ["required"],
+                "validators": [],
                 "help": "Image displayed in the popup"
               },
               "alt": {
@@ -211,23 +193,41 @@
             "validators": [],
             "help": ""
           },
-          "_left": {
+          "_x1": {
             "type": "number",
             "required": true,
             "default": 0,
-            "title": "Pin Position - Left",
+            "title": "Coordinate x1",
             "inputType": "Number",
             "validators": ["required", "number"],
-            "help": "Left position of pin"
+            "help": "Top coordinate (x)"
           },
-          "_top": {
+          "_y1": {
             "type": "number",
             "required": true,
             "default": 0,
-            "title": "Pin Position - Top",
+            "title": "Coordinate y1",
             "inputType": "Number",
             "validators": ["required", "number"],
-            "help": "Top position of pin"
+            "help": "Top coordinate (y)"
+          },
+          "_x2": {
+            "type": "number",
+            "required": true,
+            "default": 0,
+            "title": "Coordinate x2",
+            "inputType": "Number",
+            "validators": ["required", "number"],
+            "help": "Bottom coordinate (x)"
+          },
+          "_y2": {
+            "type": "number",
+            "required": true,
+            "default": 0,
+            "title": "Coordinate y2",
+            "inputType": "Number",
+            "validators": ["required", "number"],
+            "help": "Bottom coordinate (y)"
           }
         }
       }
