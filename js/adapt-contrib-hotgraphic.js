@@ -1,9 +1,13 @@
-define(function(require) {
-
+define([
+  'coreViews/componentView',
+  'coreJS/adapt',
+  'libraries/jquery.rwdImageMaps.min'
+], function(ComponentView, Adapt, RwdImageMaps) {
+    
     var ComponentView = require('coreViews/componentView');
     var Adapt = require('coreJS/adapt');
 
-    var HotGraphic = ComponentView.extend({
+    var ImageMap = ComponentView.extend({
 
         isPopupOpen: false,
         
@@ -30,30 +34,30 @@ define(function(require) {
 
         events: function() {
             return {
-                'click .hotgraphic-graphic-pin': 'onPinClicked',
-                'click .hotgraphic-popup-done': 'closePopup',
-                'click .hotgraphic-popup-nav .back': 'previousHotGraphic',
-                'click .hotgraphic-popup-nav .next': 'nextHotGraphic'
+                'click .imagemap-map-area': 'onMapAreaClicked',
+                'click .imagemap-popup-done': 'closePopup',
+                'click .imagemap-popup-nav .back': 'previousImageMap',
+                'click .imagemap-popup-nav .next': 'nextImageMap'
             }
         },
 
         preRender: function() {
             this.listenTo(Adapt, 'device:changed', this.reRender, this);
 
-            // Checks to see if the hotgraphic should be reset on revisit
+            // Checks to see if the imagemap should be reset on revisit
             this.checkIfResetOnRevisit();
         },
 
         postRender: function() {
             this.renderState();
-            this.$('.hotgraphic-widget').imageready(_.bind(function() {
+            this.$('.imagemap-widget').imageready(_.bind(function() {
                 this.setReadyStatus();
             }, this));
-
+            
             this.setupEventListeners();
         },
 
-        // Used to check if the hotgraphic should reset on revisit
+        // Used to check if the imagemap should reset on revisit
         checkIfResetOnRevisit: function() {
             var isResetOnRevisit = this.model.get('_isResetOnRevisit');
 
@@ -69,7 +73,7 @@ define(function(require) {
 
         reRender: function() {
             if (Adapt.device.screenSize != 'large') {
-                this.replaceWithNarrative();
+                //this.replaceWithNarrative();
             }
         },
 
@@ -85,7 +89,7 @@ define(function(require) {
                 }
 
                 if (this._isVisibleTop && this._isVisibleBottom) {
-                    this.$('.component-widget').off('inview');
+                    this.$('.component-inner').off('inview');
                     this.setCompletionStatus();
                 }
             }
@@ -111,7 +115,7 @@ define(function(require) {
         prepareNarrativeModel: function() {
             var model = this.model;
             model.set('_component', 'narrative');
-            model.set('_wasHotgraphic', true);
+            model.set('_wasImageMap', true);
             model.set('originalBody', model.get('body'));
             model.set('originalInstruction', model.get('instruction'));
             if (model.get('mobileBody')) {
@@ -125,41 +129,41 @@ define(function(require) {
         },
 
         applyNavigationClasses: function (index) {
-            var $nav = this.$('.hotgraphic-popup-nav'),
-                itemCount = this.$('.hotgraphic-item').length;
+            var $nav = this.$('.imagemap-popup-nav'),
+                itemCount = this.$('.imagemap-item').length;
 
             $nav.removeClass('first').removeClass('last');
-            this.$('.hotgraphic-popup-done').a11y_cntrl_enabled(true);
+            this.$('.imagemap-popup-done').a11y_cntrl_enabled(true);
             if(index <= 0 && !this.model.get('_canCycleThroughPagination')) {
-                this.$('.hotgraphic-popup-nav').addClass('first');
-                this.$('.hotgraphic-popup-controls.back').a11y_cntrl_enabled(false);
-                this.$('.hotgraphic-popup-controls.next').a11y_cntrl_enabled(true);
+                this.$('.imagemap-popup-nav').addClass('first');
+                this.$('.imagemap-popup-controls.back').a11y_cntrl_enabled(false);
+                this.$('.imagemap-popup-controls.next').a11y_cntrl_enabled(true);
             } else if (index >= itemCount-1 && !this.model.get('_canCycleThroughPagination')) {
-                this.$('.hotgraphic-popup-nav').addClass('last');
-                this.$('.hotgraphic-popup-controls.back').a11y_cntrl_enabled(true);
-                this.$('.hotgraphic-popup-controls.next').a11y_cntrl_enabled(false);
+                this.$('.imagemap-popup-nav').addClass('last');
+                this.$('.imagemap-popup-controls.back').a11y_cntrl_enabled(true);
+                this.$('.imagemap-popup-controls.next').a11y_cntrl_enabled(false);
             } else {
-                this.$('.hotgraphic-popup-controls.back').a11y_cntrl_enabled(true);
-                this.$('.hotgraphic-popup-controls.next').a11y_cntrl_enabled(true);
+                this.$('.imagemap-popup-controls.back').a11y_cntrl_enabled(true);
+                this.$('.imagemap-popup-controls.next').a11y_cntrl_enabled(true);
             }
             var classes = this.model.get("_items")[index]._classes 
                 ? this.model.get("_items")[index]._classes
                 : '';  // _classes has not been defined
       
-            this.$('.hotgraphic-popup').attr('class', 'hotgraphic-popup ' + 'item-' + index + ' ' + classes);
+            this.$('.imagemap-popup').attr('class', 'imagemap-popup ' + 'item-' + index + ' ' + classes);
 
         },
 
-        onPinClicked: function (event) {
+        onMapAreaClicked: function (event) {
             if(event) event.preventDefault();
             
-            this.$('.hotgraphic-popup-inner').a11y_on(false);
-            this.$('.hotgraphic-item').hide().removeClass('active');
+            this.$('.imagemap-popup-inner').a11y_on(false);
+            this.$('.imagemap-item').hide().removeClass('active');
             
             var $currentHotSpot = this.$('.' + $(event.currentTarget).data('id'));
             $currentHotSpot.show().addClass('active');
             
-            var currentIndex = this.$('.hotgraphic-item.active').index();
+            var currentIndex = this.$('.imagemap-item.active').index();
             this.setVisited(currentIndex);
             
             this.openPopup();
@@ -168,17 +172,17 @@ define(function(require) {
         },
         
         openPopup: function() {
-            var currentIndex = this.$('.hotgraphic-item.active').index();
-            this.$('.hotgraphic-popup-count .current').html(currentIndex + 1);
-            this.$('.hotgraphic-popup-count .total').html(this.$('.hotgraphic-item').length);
-            this.$('.hotgraphic-popup').attr('class', 'hotgraphic-popup item-' + currentIndex).show();
-            this.$('.hotgraphic-popup-inner .active').a11y_on(true);
+            var currentIndex = this.$('.imagemap-item.active').index();
+            this.$('.imagemap-popup-count .current').html(currentIndex + 1);
+            this.$('.imagemap-popup-count .total').html(this.$('.imagemap-item').length);
+            this.$('.imagemap-popup').attr('class', 'imagemap-popup item-' + currentIndex).show();
+            this.$('.imagemap-popup-inner .active').a11y_on(true);
             
             this.isPopupOpen = true;
               
-            Adapt.trigger('popup:opened',  this.$('.hotgraphic-popup-inner'));
+            Adapt.trigger('popup:opened',  this.$('.imagemap-popup-inner'));
 
-            this.$('.hotgraphic-popup-inner .active').a11y_focus();
+            this.$('.imagemap-popup-inner .active').a11y_focus();
             
             this.setupEscapeKey();
         },
@@ -186,16 +190,16 @@ define(function(require) {
         closePopup: function(event) {
             if(event) event.preventDefault();
             
-            this.$('.hotgraphic-popup').hide();
+            this.$('.imagemap-popup').hide();
             
             this.isPopupOpen = false;
             
-            Adapt.trigger('popup:closed',  this.$('.hotgraphic-popup-inner'));
+            Adapt.trigger('popup:closed',  this.$('.imagemap-popup-inner'));
         },
 
-        previousHotGraphic: function (event) {
+        previousImageMap: function (event) {
             event.preventDefault();
-            var currentIndex = this.$('.hotgraphic-item.active').index();
+            var currentIndex = this.$('.imagemap-item.active').index();
 
             if (currentIndex === 0 && !this.model.get('_canCycleThroughPagination')) {
                 return;
@@ -203,41 +207,41 @@ define(function(require) {
                 currentIndex = this.model.get('_items').length;
             }
 
-            this.$('.hotgraphic-item.active').hide().removeClass('active');
-            this.$('.hotgraphic-item').eq(currentIndex-1).show().addClass('active');
+            this.$('.imagemap-item.active').hide().removeClass('active');
+            this.$('.imagemap-item').eq(currentIndex-1).show().addClass('active');
             this.setVisited(currentIndex-1);
-            this.$('.hotgraphic-popup-count .current').html(currentIndex);
-            this.$('.hotgraphic-popup-inner').a11y_on(false);
+            this.$('.imagemap-popup-count .current').html(currentIndex);
+            this.$('.imagemap-popup-inner').a11y_on(false);
 
             this.applyNavigationClasses(currentIndex-1);
-            this.$('.hotgraphic-popup-inner .active').a11y_on(true);
-            this.$('.hotgraphic-popup-inner .active').a11y_focus();
+            this.$('.imagemap-popup-inner .active').a11y_on(true);
+            this.$('.imagemap-popup-inner .active').a11y_focus();
         },
 
-        nextHotGraphic: function (event) {
+        nextImageMap: function (event) {
             event.preventDefault();
-            var currentIndex = this.$('.hotgraphic-item.active').index();
+            var currentIndex = this.$('.imagemap-item.active').index();
             if (currentIndex === (this.model.get('_items').length-1) && !this.model.get('_canCycleThroughPagination')) {
                 return;
             } else if (currentIndex === (this.model.get('_items').length-1) && this.model.get('_canCycleThroughPagination')) {
                 currentIndex = -1;
             }
-            this.$('.hotgraphic-item.active').hide().removeClass('active');
-            this.$('.hotgraphic-item').eq(currentIndex+1).show().addClass('active');
+            this.$('.imagemap-item.active').hide().removeClass('active');
+            this.$('.imagemap-item').eq(currentIndex+1).show().addClass('active');
             this.setVisited(currentIndex+1);
-            this.$('.hotgraphic-popup-count .current').html(currentIndex+2);
-            this.$('.hotgraphic-popup-inner').a11y_on(false);
+            this.$('.imagemap-popup-count .current').html(currentIndex+2);
+            this.$('.imagemap-popup-inner').a11y_on(false);
 
             this.applyNavigationClasses(currentIndex+1);
-            this.$('.hotgraphic-popup-inner .active').a11y_on(true);
-            this.$('.hotgraphic-popup-inner .active').a11y_focus();
+            this.$('.imagemap-popup-inner .active').a11y_on(true);
+            this.$('.imagemap-popup-inner .active').a11y_focus();
         },
 
         setVisited: function(index) {
             var item = this.model.get('_items')[index];
             item._isVisited = true;
 
-            var $pin = this.$('.hotgraphic-graphic-pin').eq(index);
+            var $pin = this.$('.imagemap-graphic-pin').eq(index);
             $pin.addClass('visited');
             // append the word 'visited.' to the pin's aria-label
             var visitedLabel = this.model.get('_globals')._accessibility._ariaLabels.visited + ".";
@@ -300,8 +304,8 @@ define(function(require) {
 
     });
 
-    Adapt.register('hotgraphic', HotGraphic);
+    Adapt.register('imagemap', ImageMap);
 
-    return HotGraphic;
+    return ImageMap;
 
 });
