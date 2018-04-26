@@ -1,0 +1,73 @@
+<div class="imagemap-inner component-inner" role="region" aria-label="{{_globals._components._imagemap.ariaRegion}}" {{#if _globals._components._imagemap.ariaRegion}}tabindex="0" {{/if}}>
+    {{> component this}}
+    <div class="imagemap-widget component-widget">
+
+        <div class="imagemap-graphic">
+            <img src="{{_graphic.src}}" aria-label="{{_graphic.alt}}" usemap="#imagemap" height="{{_graphic.height}}" width="{{_graphic.width}}" style="height: auto!important; max-width: 100%!important; margin: 0px auto; display: block;" />
+
+            <map name="imagemap">
+              {{#each _items}}
+                <area shape="rect" href="#" coords="{{{_x1}}},{{{_y1}}},{{{_x2}}},{{{_y2}}}" class="imagemap-map-area {{#if _isVisited}}visited{{/if}} imagemap-map-area-{{@index}} {{#if _graphic._classes}}{{_graphic._classes}}{{/if}}" data-id="item-{{@index}}">
+              {{/each}}
+            </map>
+
+            <div class="imagemap-popup" role="dialog" aria-label="{{_globals._components._imagemap.ariaPopupLabel}}">
+
+                <div class="imagemap-popup-toolbar component-item-color clearfix">
+                    {{#unless _hidePagination}}
+                    <div class="imagemap-popup-nav component-item-color">
+                        <button class="base imagemap-popup-controls back" aria-label="{{_globals._accessibility._ariaLabels.previous}}" role="button">
+                                <div class="imagemap-popup-arrow-l component-item-text-color icon icon-controls-small-left"></div>
+                        </button>
+                        <div class="imagemap-popup-count component-item-text-color">
+                            <span class="current">1</span>/<span class="total">3</span>
+                        </div>
+                        <button class="base imagemap-popup-controls next" aria-label="{{_globals._accessibility._ariaLabels.next}}" role="button">
+                            <div class="imagemap-popup-arrow-r component-item-text-color icon icon-controls-small-right"></div>
+                        </button>
+                    </div>
+                    {{/unless}}
+                    <button class="base imagemap-popup-done" aria-label="{{_globals._accessibility._ariaLabels.closePopup}}" role="button">
+                        <div class="imagemap-popup-close component-item-text-color icon icon-cross"></div>
+                    </button>
+                </div>
+
+                <div class="imagemap-popup-inner clearfix">
+                    {{#each _items}}
+                    <div class="imagemap-item component-item item-{{@index}} {{_classes}}">
+                        <div class="imagemap-item-content">
+                            <div class="imagemap-item-content-inner">
+                                {{#if _graphic.src}}
+                                <div class="imagemap-item-graphic">
+                                    <div class="imagemap-item-graphic-inner">
+                                        <img src="{{_graphic.src}}" aria-label="{{_graphic.alt}}" tabindex="0" />
+                                    </div>
+                                    {{#if _graphic.attribution}}
+                                    <div class="graphic-attribution">{{{_graphic.attribution}}}</div>
+                                    {{/if}}
+                                </div>
+                                {{/if}}
+                                <div class="imagemap-content-title accessible-text-block" role="heading" aria-level="5" tabindex="0">
+                                    {{{title}}}
+                                </div>
+                                <div class="imagemap-content-body">
+                                    {{{a11y_text body}}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    window.addEventListener('load', function() {
+        $('img[usemap]').rwdImageMaps();
+    }, false);
+
+</script>
