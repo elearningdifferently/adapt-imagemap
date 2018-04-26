@@ -1,0 +1,154 @@
+.imagemap-component {
+
+	.imagemap-graphic {
+		position: relative;
+		display:inline-block;
+		width: 100%;
+	}
+
+	.imagemap-popup {
+		display: none;
+		width: auto;
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		height: auto;
+		margin: 40px;
+		background-color: @background-color;
+		border: @item-border;
+		z-index: 5;
+	}
+
+	.imagemap-popup-toolbar {
+		position: relative;
+		background-color: @item-color;
+		height: (@item-padding-top + @item-padding-bottom) + @icon-size;
+	}
+
+	.imagemap-popup-nav {
+		background-color: @item-color;
+	}
+
+	.imagemap-popup-done {
+		position: absolute;
+		top: 0;
+		right: 0;
+		text-decoration: none;
+		.dir-rtl & {
+			right: inherit;
+			left: 0;
+		}
+		.no-touch &:hover {
+			.imagemap-popup-close {
+				color: @button-text-color-hover;
+			}
+		}
+	}
+
+	.imagemap-popup-arrow-l,
+	.imagemap-popup-arrow-r,
+	.imagemap-popup-close {
+		padding: @item-padding;
+		color: #fff;
+	}
+
+	.imagemap-popup-count {
+		padding: @item-padding;
+		vertical-align: baseline;
+		color: @item-text-color;
+		float: left;
+		.dir-rtl & {
+			float: right;
+		}
+		span {
+			display: inline-block;
+		}
+	}
+
+	.imagemap-popup-controls {
+		float: left;
+		text-decoration: none;
+		.dir-rtl & {
+			float: right;
+		}
+		.no-touch &:hover {
+			.imagemap-popup-arrow-l,
+			.imagemap-popup-arrow-r {
+				color: @button-text-color-hover;
+			}
+		}
+		&.disabled {
+			visibility: hidden;
+		}
+	}
+
+	.imagemap-popup-inner {
+		padding: @item-padding;
+	}
+    
+    .imagemap-content-title {
+        font-weight: 700;
+        font-size: 22px;
+    }
+
+	.imagemap-item-graphic {
+		width: 30%;
+		float: right;
+		.dir-rtl & {
+			float: left;
+		}
+		text-align: center;
+	}
+
+	.imagemap-item-graphic-inner{
+		padding-left: @item-padding-left;
+		.dir-rtl & {
+			padding-left: inherit;
+			padding-right: @item-padding-left;
+		}
+	}
+
+	.imagemap-item-content {
+		width: 100%;
+        box-sizing: border-box;
+        padding: 20ppx;
+	}
+
+	.graphic-attribution {
+        font-size:0.75em;
+        line-height: 1em;
+    }
+}
+
+// Imagemap Narrative
+
+.imagemap-narrative {
+	position: relative;
+	max-height: 500px;
+	height: 500px;
+}
+
+.cols-1 {
+	width: 25%;
+}
+
+.cols-2 {
+	width: 50%;
+}
+
+.cols-3 {
+	width: 75%;
+}
+
+.cols-4 {
+	width: 100%;
+}
+
+.rows-1 {
+	height: 50%;
+}
+
+.rows-2 {
+	height: 100%;
+}
