@@ -1,3 +1,3 @@
 # adapt-imagemap 
 
-**Image Map** is a component adapted from [adapt-contrib-hotgraphic](https://github.com/adaptlearning/adapt-contrib-hotgraphic) by Pete Stewart.
+**Image Map** is Pete Stewart's adaption of the [adapt-contrib-hotgraphic](https://github.com/adaptlearning/adapt-contrib-hotgraphic) *presentation component* bundled with the [Adapt framework](https://github.com/adaptlearning/adapt_framework).
