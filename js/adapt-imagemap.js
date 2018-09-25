@@ -73,7 +73,7 @@ define([
 
         reRender: function() {
             if (Adapt.device.screenSize != 'large') {
-                //this.replaceWithNarrative();
+                this.replaceWithNarrative();
             }
         },
 
