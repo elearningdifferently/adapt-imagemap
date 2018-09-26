@@ -1,8 +1,8 @@
 define([
   'coreViews/componentView',
   'coreJS/adapt',
-  'libraries/imageMapResizer.min'
-], function(ComponentView, Adapt, ImageMapResize) {
+  'libraries/jquery.rwdImageMaps.min'
+], function(ComponentView, Adapt, RwdImageMaps) {
     
     var ComponentView = require('coreViews/componentView');
     var Adapt = require('coreJS/adapt');
