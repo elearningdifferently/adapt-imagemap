@@ -27,9 +27,9 @@ define([
             }
             if (Adapt.device.screenSize == 'large') {
                 this.render();
-            } else {
+            } /*else {
                 this.reRender();
-            }
+            }*/
         },
 
         events: function() {
@@ -71,12 +71,11 @@ define([
             }
         },
 
-        reRender: function() {
+/*        reRender: function() {
             if (Adapt.device.screenSize != 'large') {
-                return;
-                // this.replaceWithNarrative();
+                this.replaceWithNarrative();
             }
-        },
+        },*/
 
         inview: function(event, visible, visiblePartX, visiblePartY) {
             if (visible) {
